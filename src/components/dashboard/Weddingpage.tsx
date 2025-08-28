@@ -123,6 +123,7 @@ export default function WeddingPage({ setActivePage }: PageProps) {
                     <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/70 to-transparent text-white p-2 text-center text-sm opacity-0 group-hover:opacity-100 transition-opacity">
                       {modernTitles[category]} Highlight {i + 1}
                     </div>
+                    
                   </div>
                 </SwiperSlide>
               ))}
@@ -131,10 +132,12 @@ export default function WeddingPage({ setActivePage }: PageProps) {
         </Card>
       ))}
 
-      {/* Booking Section */}
-  
-
-      {/* Booking/Login Modal */}
+          <button
+           onClick={() => setActivePage("Booking")}
+           className="bg-gradient-to-r from-pink-500 to-yellow-400 hover:scale-105 transform transition duration-300 text-white font-semibold  px-6 py-3 rounded-full shadow-lg hover:shadow-xl"
+           >
+            Book Now
+           </button>
 
     </div>
   );

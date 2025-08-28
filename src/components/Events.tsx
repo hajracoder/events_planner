@@ -1,108 +1,71 @@
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card"
-// import { Button } from "@/components/ui/button"
+// import eng from "../../assets/eng.jpg";
+// import bussiness from "../../assets/bussiness.jpg";
+// import family from "../../assets/family.jpg";
+// import party from "../../assets/party.jpg";
+// import wedding1 from "../../assets/wedding1.jpg";
 
+// interface EventCard {
+//   title: string;
+//   description: string;
+//   image: string;
+//   page: string; // 👈 direct page ka naam store karenge
+// }
 
+// const events: EventCard[] = [
+//   { title: "Engagement Parties", description: "Celebrate your engagement in style...", image: eng, page: "Engagement" },
+//   { title: "Birthday Celebrations", description: "Fun-filled birthdays with cakes, balloons & music...", image: party, page: "Birthday" },
+//   { title: "Parties & Get-Togethers", description: "Casual gatherings & fun hangouts with friends...", image: party, page: "Party" },
+//   { title: "Board Meetings & Conferences", description: "Professional business meetings & corporate events...", image: bussiness, page: "Business" },
+//   { title: "Family Reunions", description: "Reconnect with your family & create lifetime memories...", image: family, page: "Family" },
+//   { title: "Weddings & Marriage Events", description: "Plan your perfect wedding with decor, food & music...", image: wedding1, page: "Wedding" },
+// ];
 
-import { X } from "lucide-react";
+// export default function Events({ setActivePage }: { setActivePage: (page: string) => void }) {
+//   return (
+//     <div className="p-6 bg-gray-100 dark:bg-gray-900 min-h-screen">
+//       <h2 className="text-3xl font-bold mb-6 text-indigo-600 dark:text-indigo-400">
+//         Events
+//       </h2>
 
-type Event = {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
-  location: string;
-  image: string;
-};
+//       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//         {events.map((event) => (
+//           <div
+//             key={event.title}
+//             onClick={() => setActivePage(event.page)} // 👈 direct use karenge
+//             className="relative rounded-2xl shadow-2xl overflow-hidden cursor-pointer group transform transition-all duration-300"
+//           >
+//             <img
+//               src={event.image}
+//               alt={event.title}
+//               className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+//             />
 
-const events: Event[] = [
-  {
-    id: 1,
-    title: "Birthday Party",
-    description: "Join us for a fun-filled birthday celebration with music, food, and games!",
-    date: "12th September 2025",
-    location: "Sunshine Banquet Hall",
-    image: "https://source.unsplash.com/400x250/?birthday,party"
-  },
-  {
-    id: 2,
-    title: "Music Concert",
-    description: "Experience an electrifying evening of live music with top artists.",
-    date: "18th September 2025",
-    location: "City Arena, Downtown",
-    image: "https://source.unsplash.com/400x250/?concert,music"
-  },
-  {
-    id: 3,
-    title: "Wedding Ceremony",
-    description: "Celebrate the wedding of Sarah & Ahmed with family and friends.",
-    date: "25th September 2025",
-    location: "Royal Palace Garden",
-    image: "https://source.unsplash.com/400x250/?wedding,celebration"
-  }
-];
+//             {/* Overlay */}
+//             <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-6 text-center">
+//               <h3 className="text-2xl font-extrabold text-white mb-2">
+//                 {event.title}
+//               </h3>
+//               <p className="text-white text-sm">
+//                 {event.description.length > 80
+//                   ? event.description.slice(0, 80) + "..."
+//                   : event.description}
+//               </p>
+//             </div>
 
-export default function Events() {
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-
-  return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
-        Upcoming Events
-      </h1>
-
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {events.map((event) => (
-          <Card
-            key={event.id}
-            className="cursor-pointer hover:shadow-xl transition"
-            onClick={() => setSelectedEvent(event)}
-          >
-            <img
-              src={event.image}
-              alt={event.title}
-              className="w-full h-40 object-cover rounded-t-2xl"
-            />
-            <CardContent className="p-4">
-              <h2 className="text-xl font-semibold">{event.title}</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                {event.date} - {event.location}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {/* Modal */}
-      {selectedEvent && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-[90%] max-w-2xl relative">
-            {/* Close Button */}
-            <button
-              className="absolute top-3 right-3 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-              onClick={() => setSelectedEvent(null)}
-            >
-              <X size={20} />
-            </button>
-
-            <img
-              src={selectedEvent.image}
-              alt={selectedEvent.title}
-              className="w-full h-56 object-cover rounded-t-2xl"
-            />
-            <div className="p-6">
-              <h2 className="text-2xl font-bold mb-2">{selectedEvent.title}</h2>
-              <p className="text-gray-700 dark:text-gray-300 mb-4">
-                {selectedEvent.description}
-              </p>
-              <p className="text-sm text-gray-500">
-                📅 {selectedEvent.date} | 📍 {selectedEvent.location}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+//             {/* Card Bottom */}
+//             <div className="p-6 bg-gradient-to-b from-white to-gray-100 dark:from-gray-700 dark:to-gray-800">
+//               <h3 className="text-xl font-bold mb-2 text-purple-600 dark:text-pink-400">
+//                 {event.title}
+//               </h3>
+//               <p className="text-gray-700 dark:text-gray-300 text-sm">
+//                 {event.description.length > 100
+//                   ? event.description.slice(0, 100) + "..."
+//                   : event.description}
+//               </p>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }

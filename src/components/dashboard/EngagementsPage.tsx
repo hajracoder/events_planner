@@ -12,6 +12,19 @@ export default function EngagementPage({ setActivePage }: { setActivePage: (page
       <p className="mt-4 text-lg text-gray-600">
         Celebrate your engagement with style 🎉. Full decoration, catering & memorable setups.
       </p>
+
+
+       <div>
+              <button
+  onClick={() => setActivePage("Booking")}
+  className="bg-gradient-to-r from-pink-500 to-yellow-400 hover:scale-105 transform transition duration-300 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl"
+>
+  Book Now
+</button>
     </div>
+    </div>
+    
   );
 }
+
+
