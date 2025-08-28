@@ -3,12 +3,13 @@ import bussiness from "../../assets/bussiness.jpg";
 import { Card, CardContent } from "../ui/card";
 
 const quotes = [
-  "“Great businesses are built on trust and vision.”",
+  "“Great businesses are built on trust and vision 🥰”",
   "“Innovation distinguishes between a leader and a follower.”",
   "“Success in business starts with smart strategy and bold action.”",
   "“Every big company was once a small idea executed well.”",
   "“Good business creates value, great business creates impact.”",
 ];
+
 
 export default function BusinessPage({
   setActivePage,
@@ -46,12 +47,14 @@ export default function BusinessPage({
         </h2>
         <p
           key={index}
-          className="text-xl  text-white italic max-w-3xl mx-auto transition-opacity duration-700 ease-in-out"
+          className="text-2xl font-bold  text-white italic max-w-3xl mx-auto transition-opacity duration-700 ease-in-out"
         >
           {quotes[index]}
         </p>
         </CardContent>
       </Card>
+      
+
       </div>
     
   );
