@@ -82,7 +82,7 @@ function App() {
         {activePage === "Business" && <BusinessPage setActivePage={setActivePage} />}
         {activePage === "Family" && <FamilyPage setActivePage={setActivePage} />}
         {activePage === "Wedding" && <Weddingpage setActivePage={setActivePage} />}
-        {activePage === "Booking" && <Booking />}
+        {activePage === "Booking" && <Booking setActivePage={setActivePage} />}
       </div>
     </div>
   );

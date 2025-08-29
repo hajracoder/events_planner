@@ -131,13 +131,21 @@ export default function WeddingPage({ setActivePage }: PageProps) {
           </CardContent>
         </Card>
       ))}
+<div className="flex justify-center items-center py-16">
+  <button
+    onClick={() => setActivePage("Booking")}
+    className="relative px-8 py-4 font-bold text-lg text-white rounded-full shadow-xl 
+               bg-gradient-to-r from-yellow-400 via-red-500 to-yellow-500
+               hover:scale-105 hover:shadow-2xl transition-transform duration-300
+               animate-pulse-slow
+               before:absolute before:inset-0 before:rounded-full before:bg-yellow-200 
+               before:opacity-30 before:blur-xl before:-z-10"
+  >
+    Book Your Spot
+  </button>
+</div>
 
-          <button
-           onClick={() => setActivePage("Booking")}
-           className="bg-gradient-to-r from-pink-500 to-yellow-400 hover:scale-105 transform transition duration-300 text-white font-semibold  px-6 py-3 rounded-full shadow-lg hover:shadow-xl"
-           >
-            Book Now
-           </button>
+
 
     </div>
   );
