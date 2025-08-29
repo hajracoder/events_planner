@@ -69,3 +69,15 @@
 //     </div>
 //   );
 // }
+
+  
+  const Events = () => {
+    return (
+      <div>
+         dashboard
+      </div>
+    )
+  }
+  
+  export default Events
+  

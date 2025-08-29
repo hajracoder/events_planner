@@ -40,10 +40,7 @@
 // export default App;
 
 
-
-
-
-
+// -------------------------------------------------
 
 
 
@@ -51,6 +48,7 @@
 import { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/dashboard/Dashboard";
+import Events from "./components/Events"; // 👈 missing import add kiya
 import EngagementsPage from "./components/dashboard/EngagementsPage";
 import BirthdayPage from "./components/dashboard/BirthdayPage";
 import BusinessPage from "./components/dashboard/BusinessPage";
@@ -60,7 +58,6 @@ import Weddingpage from "./components/dashboard/Weddingpage";
 import Booking from "./components/dashboard/Booking";
 
 function App() {
-  // ✅ Use simple string type to avoid TS errors
   const [activePage, setActivePage] = useState<string>("Dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -70,12 +67,13 @@ function App() {
       <Sidebar 
         isOpen={sidebarOpen}
         toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-        setActivePage={setActivePage} // Pass state setter directly
+        setActivePage={setActivePage}
       />
 
       {/* Main content */}
       <div className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-800">
-        {activePage === "Dashboard" && <Dashboard setActivePage={setActivePage} />}
+        {activePage === "Events" && <Dashboard setActivePage={setActivePage} />}
+        {activePage === "Dashboard" && <Events/>}
         {activePage === "Engagement" && <EngagementsPage setActivePage={setActivePage} />}
         {activePage === "Birthday" && <BirthdayPage setActivePage={setActivePage} />}
         {activePage === "Party" && <PartyPage setActivePage={setActivePage} />}
