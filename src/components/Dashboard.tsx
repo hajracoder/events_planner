@@ -142,29 +142,6 @@ export default function DashboardSubjects() {
     </div>
   </div>
 </div>
-
-
-      {/* Graph */}
-           {/* Graph */}
-                {/* Graph */}
-      {/* <div className="p-4 rounded-lg shadow-lg border cursor-pointer hover:bg-gray-100 transition-colors">
-        <h2 className="text-lg sm:text-xl font-bold mb-4">Events Overview</h2>
-        
-        <div className="w-full h-64 sm:h-72 md:h-80 lg:h-96">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="Events" stroke="#8884d8" strokeWidth={2} />
-              <Line type="monotone" dataKey="Locations" stroke="#3b82f6" strokeWidth={2} />
-              <Line type="monotone" dataKey="Trending" stroke="#facc15" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div> */}
       <TopEventsDashboard/>
     </div>
     
