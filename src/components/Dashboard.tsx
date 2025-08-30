@@ -1,7 +1,5 @@
-import  { useState, useEffect } from "react";
+
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -12,41 +10,12 @@ PieChart,Pie,Cell, BarChart,
   Bar,
 } from "recharts";
 
-
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  location: string;
-  value: number; // Event score
-  locValue: number; // Location score
-  topValue: number; // Trending score
-}
-
-// Sample dynamic events data
-const sampleEvents: Event[] = [
-  { id: "1", title: "Faisalabad", date: "2025-09-01", location: "Karachi",  value: 8, locValue: 15, topValue: 12 },
-  { id: "2", title: "Lahore", date: "2025-09-02", location: "Lahore", value: 12, locValue: 20, topValue: 18 },
-  { id: "3", title: "Marriage", date: "2025-09-03", location: "Islamabad", value: 5, locValue: 10, topValue: 6 },
-  { id: "4", title: "Party", date: "2025-09-04", location: "Multan", value: 15, locValue: 18, topValue: 14 },
-
-];
-
+import TopEventsDashboard from "./TopEventsDashboard";
 
 export default function DashboardSubjects() {
-  const [events, setEvents] = useState<Event[]>([]);
 
-  useEffect(() => {
-    setEvents(sampleEvents);
-  }, []);
 
-  // Graph data: Events, Locations, Top Events
-  const chartData = events.map(e => ({
-    name: e.title,
-    Events: e.value,
-    Locations: e.locValue,
-    Trending: e.topValue,
-  }));
+
 
   return (
     <div className="p-6 space-y-6">
@@ -178,7 +147,7 @@ export default function DashboardSubjects() {
       {/* Graph */}
            {/* Graph */}
                 {/* Graph */}
-      <div className="p-4 rounded-lg shadow-lg border cursor-pointer hover:bg-gray-100 transition-colors">
+      {/* <div className="p-4 rounded-lg shadow-lg border cursor-pointer hover:bg-gray-100 transition-colors">
         <h2 className="text-lg sm:text-xl font-bold mb-4">Events Overview</h2>
         
         <div className="w-full h-64 sm:h-72 md:h-80 lg:h-96">
@@ -195,8 +164,10 @@ export default function DashboardSubjects() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </div> */}
+      <TopEventsDashboard/>
     </div>
+    
   );
 }
 
