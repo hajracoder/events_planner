@@ -51,6 +51,9 @@ export default function DashboardSubjects() {
   return (
     <div className="p-6 space-y-6">
       {/* Top 5 High-Level Cards */}
+     <h6 className="text-emerald-500 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold">
+  Welcome Dashboard
+</h6>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
   {/* Our Users */}
   <div className="p-4 rounded-lg shadow-lg border cursor-pointer hover:bg-gray-100 transition-colors">
