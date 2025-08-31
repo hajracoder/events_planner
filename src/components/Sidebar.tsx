@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { LayoutDashboard, Calendar, MapPin, Users, Menu, ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "../assets/logo.png";
 
@@ -13,11 +14,9 @@ const navItems = [
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
 
   return (
     <section className="font-[Montserrat]">
-      {/* Mobile Toggle Button */}
       <div className="lg:hidden fixed top-4 right-4 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -52,6 +51,7 @@ export default function Sidebar() {
 
         {/* Navigation */}
         <nav className="flex flex-col space-y-2">
+
           {navItems.map(({ label, path, icon: Icon }) => {
             const isActive = location.pathname === path;
             return (
@@ -70,8 +70,30 @@ export default function Sidebar() {
               </NavLink>
             );
           })}
+
+          {navItems.map(({ label, path, icon: Icon }) => (
+            <NavLink
+              key={path}
+              to={path}
+              end={path === "/dashboard"}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 rounded-md text-base cursor-pointer transition-all
+                ${isActive
+                  ? "bg-white text-green-700 font-semibold border-l-4 border-green-900"
+                  : "hover:bg-green-600 hover:text-white text-green-900"}`
+              }
+            >
+              <Icon size={isOpen ? 20 : 26} />
+              {isOpen && <span>{label}</span>}
+            </NavLink>
+          ))}
+
         </nav>
       </aside>
     </section>
   );
 }
+
+
+
+
