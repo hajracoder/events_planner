@@ -41,7 +41,7 @@ import Users from "./components/Users";
 
 export default function App() {
   return (
-    <Router basename="/events_planner">
+    <Router basename="/events_planner/">
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-6">
