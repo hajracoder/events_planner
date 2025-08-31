@@ -80,17 +80,21 @@ export default function Locations() {
 
   return (
     <div className="p-4 md:p-6 space-y-6">
+
+      <h6 className="text-emerald-500 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold">
+  Welcome Loactions
+</h6>
       {/* Search & Add */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
         <input
           type="text"
           placeholder="Search location..."
-          className="border px-3 py-2 rounded w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border px-3 py-2 rounded w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-emerald-300"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto"
+          className=" focus:ring-emerald-300  text-emerald-500 bg-emerald-100 px-4 py-2 rounded w-full md:w-auto"
           onClick={() => setShowForm(!showForm)}
         >
           {showForm ? "Close Form" : "Add Location"}
@@ -103,7 +107,7 @@ export default function Locations() {
           onSubmit={handleAddLocation} 
           className="border p-4 md:p-6 rounded-lg shadow-md bg-white space-y-4 max-w-4xl mx-auto"
         >
-          <h2 className="text-lg font-semibold text-gray-700 mb-2">Add New Location</h2>
+          <h2 className="text-lg font-semibold text-emerald-300 mb-2">Add New Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <input
               type="text"
@@ -145,7 +149,7 @@ export default function Locations() {
               type="number"
               name="lng"
               placeholder="Longitude"
-              className="border px-3 py-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="border px-3 py-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-emerald-300"
               value={formData.lng}
               onChange={handleInputChange}
               required
@@ -162,15 +166,15 @@ export default function Locations() {
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[600px] border border-gray-300 rounded-2xl">
+      <div className="overflow-x-auto rounded ">
+        <table className="w-full min-w-[600px]  border-gray-300 rounded-4xl">
           <thead className="bg-gray-100">
             <tr>
-              <th className="border px-4 py-2">Address</th>
-              <th className="border px-4 py-2">Location</th>
-              <th className="border px-4 py-2">Status</th>
-              <th className="border px-4 py-2">Map</th>
-              <th className="border px-4 py-2">Actions</th>
+              <th className="border text-emerald-300 px-4 py-2">Address</th>
+              <th className="border  text-emerald-300 px-4 py-2">Location</th>
+              <th className="border text-emerald-300 px-4 py-2">Status</th>
+              <th className="border text-emerald-300 px-4 py-2">Map</th>
+              <th className="border text-emerald-300 px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -199,10 +203,10 @@ export default function Locations() {
                     zoomControl={true}
                     className="h-32 w-48 md:h-36 md:w-60"
                   >
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    />
+                                      <TileLayer
+  url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+  attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+/>
                   </MapContainer>
                 </td>
                 <td className="border px-4 py-2 space-x-2">
@@ -217,7 +221,7 @@ export default function Locations() {
             ))}
             {currentLocations.length === 0 && (
               <tr>
-                <td colSpan={5} className="p-4 text-gray-500">
+                <td colSpan={5} className="p-4 bg-emerald-300">
                   No locations found
                 </td>
               </tr>
@@ -225,6 +229,7 @@ export default function Locations() {
           </tbody>
         </table>
       </div>
+
 
       {/* Pagination */}
       {totalPages > 1 && (
@@ -234,7 +239,7 @@ export default function Locations() {
               key={page}
               className={`px-3 py-1 rounded ${
                 page === currentPage
-                  ? "bg-blue-500 text-white"
+                  ? "bg-emerald-300 text-white"
                   : "bg-gray-200 text-gray-700"
               }`}
               onClick={() => goToPage(page)}
@@ -247,3 +252,7 @@ export default function Locations() {
     </div>
   );
 }
+
+
+
+
