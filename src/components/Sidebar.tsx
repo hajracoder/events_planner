@@ -71,22 +71,7 @@ export default function Sidebar() {
             );
           })}
 
-          {navItems.map(({ label, path, icon: Icon }) => (
-            <NavLink
-              key={path}
-              to={path}
-              end={path === "/dashboard"}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-md text-base cursor-pointer transition-all
-                ${isActive
-                  ? "bg-white text-green-700 font-semibold border-l-4 border-green-900"
-                  : "hover:bg-green-600 hover:text-white text-green-900"}`
-              }
-            >
-              <Icon size={isOpen ? 20 : 26} />
-              {isOpen && <span>{label}</span>}
-            </NavLink>
-          ))}
+         
 
         </nav>
       </aside>
