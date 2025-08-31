@@ -5,8 +5,8 @@ import App from "./App";
 import "./index.css";
 
 // Detect production (Vercel) vs local
-const basename = import.meta.env.PROD ? "/events_planner" : "/";
-
+// For local development only
+const basename = process.env.NODE_ENV === "production" ? "/events_planner" : "/";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter basename={basename}>
