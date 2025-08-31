@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { LayoutDashboard, Calendar, MapPin, Users, Menu, ChevronLeft, ChevronRight } from "lucide-react";
 import logo from "../assets/logo.png";
 
@@ -10,16 +11,14 @@ const navItems = [
   { label: "Users", path: "/users", icon: Users },
 ];
 
-
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
 
   return (
-    <section className="font-[Montserrat] ">
+    <section className="font-[Montserrat]">
       {/* Mobile Toggle */}
-      <div className="lg:hidden fixed top-4 right-4 z-50 ">
+      <div className="lg:hidden fixed top-4 right-4 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="bg-gray-800 text-white p-2 rounded-md"
@@ -47,46 +46,34 @@ export default function Sidebar() {
 
         {/* Logo */}
         <div className="flex items-center justify-center mb-10 cursor-default space-x-2">
-          <img
-            src={logo}
-            alt="Event Planner Logo"
-            className={`${isOpen ? "h-20 w-18 -mt-6" : "h-20 w-18 -mt-6"} transition-all`}
-          />
-          {isOpen && (
-            <h3 className="text-lg font-bold text-green-900 -mt-6">
-              Event Planner
-            </h3>
-          )}
+          <img src={logo} alt="Event Planner Logo" className="h-20 w-18 -mt-6 transition-all" />
+          {isOpen && <h3 className="text-lg font-bold text-green-900 -mt-6">Event Planner</h3>}
         </div>
 
         {/* Navigation */}
         <nav className="flex flex-col space-y-2">
-          {navItems.map(({ label, path, icon: Icon }) => {
-            const isDashboardActive =
-              path === "/dashboard" &&
-              (location.pathname === "/dashboard" || location.pathname === "/dashboard");
-
-            return (
-              <NavLink
-                key={path}
-                to={path}
-                end
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-md text-base cursor-pointer transition-all
-                   ${
-                     isActive || isDashboardActive
-                       ? "bg-white text-green-700 font-semibold border-l-4 border-green-900"
-                       : "hover:bg-green-600 hover:text-white text-green-900"
-                   }`
-                }
-              >
-                <Icon size={isOpen ? 20 : 26} />
-                {isOpen && <span>{label}</span>}
-              </NavLink>
-            );
-          })}
+          {navItems.map(({ label, path, icon: Icon }) => (
+            <NavLink
+              key={path}
+              to={path}
+              end={path === "/dashboard"}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 rounded-md text-base cursor-pointer transition-all
+                ${isActive
+                  ? "bg-white text-green-700 font-semibold border-l-4 border-green-900"
+                  : "hover:bg-green-600 hover:text-white text-green-900"}`
+              }
+            >
+              <Icon size={isOpen ? 20 : 26} />
+              {isOpen && <span>{label}</span>}
+            </NavLink>
+          ))}
         </nav>
       </aside>
     </section>
   );
 }
+
+
+
+
