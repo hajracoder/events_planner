@@ -31,7 +31,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-base: process.env.VITE_BASE_PATH || "/events_planner/",
+base: process.env.VITE_BASE_PATH || "/events_planner",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
