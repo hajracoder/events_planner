@@ -29,7 +29,9 @@
 //   );
 // }
 
-// src/App.tsx
+
+
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
@@ -39,13 +41,11 @@ import Users from "./components/Users";
 
 export default function App() {
   return (
-    // ← Here is the BrowserRouter with basename
     <Router basename="/events_planner">
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-6">
           <Routes>
-            {/* Redirect root to /dashboard */}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/events" element={<Events />} />
