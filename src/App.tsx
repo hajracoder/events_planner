@@ -1,11 +1,10 @@
 
 
 
-
-
 // import { useEffect, useState } from "react";
 // import { Routes, Route, Navigate } from "react-router-dom";
 // import { account } from "./appwrite";
+
 // import Signup from "./pages/Signup";
 // import Login from "./pages/Login_form";
 // import Navbar from "./components/Navbar";
@@ -21,7 +20,7 @@
 //   const [user, setUser] = useState<any>(null);
 //   const [loading, setLoading] = useState(true);
 
-//   // Check if user already logged in
+//   // Check if user logged in
 //   useEffect(() => {
 //     const checkUser = async () => {
 //       try {
@@ -53,63 +52,44 @@
 //   return (
 //     <div className="flex flex-col h-screen">
 //       {/* Navbar always top */}
-//       <Navbar user={user} setUser={setUser} /> (
-    
-//     <Routes>
-//       <Route path="/signup" element={<Signup setUser={setUser} />} />
-//       <Route path="/login" element={<Login setUser={setUser} />} />
-//       <Route path="*" element={<Navigate to="/login" />} />
-//     </Routes>
-//   ) : (
-    
-//     <div className="flex flex-col h-screen">
-//       {/* Navbar top */}
 //       <Navbar user={user} setUser={setUser} />
 
-//       {/* Sidebar left + main content */}
-
+//       {/* Sidebar + main content */}
 //       <div className="flex flex-1 overflow-hidden">
 //         <Sidebar />
 
 //         <main className="flex-1 p-6 overflow-y-auto">
 //           <Routes>
-
 //             <Route path="/" element={<Dashboard />} />
 //             <Route path="/events" element={<Events />} />
 //             <Route path="/locations" element={<Locations />} />
 //             <Route path="/users" element={<Users />} />
 //             <Route path="*" element={<Navigate to="/" />} />
-//             <Route path="/dashboard" element={<Dashboard />} />
-//             <Route path="/events" element={<Events />} />
-//             <Route path="/locations" element={<Locations />} />
-//             <Route path="/users" element={<Users />} />
-//             <Route path="*" element={<Navigate to="/dashboard" />} />
-
 //           </Routes>
 //         </main>
 //       </div>
 //     </div>
-//   </div>
-//   )}
+//   );
+// }
 
 
 
 
 
-import { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { account } from "./appwrite";
+import { useEffect, useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { account } from './appwrite';
 
-import Signup from "./pages/Signup";
-import Login from "./pages/Login_form";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
+import Signup from './pages/Signup';
+import Login from './pages/Login_form';
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
 
 // Pages
-import Dashboard from "./components/Dashboard";
-import Events from "./components/Events";
-import Locations from "./components/Locations";
-import Users from "./components/Users";
+import Dashboard from './components/Dashboard';
+import Events from './components/Events';
+import Locations from './components/Locations';
+import Users from './components/Users';
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
@@ -133,7 +113,6 @@ export default function App() {
   if (loading) return <p className="text-center mt-10 text-lg">Loading...</p>;
 
   if (!user) {
-    // --- Not logged in ---
     return (
       <Routes>
         <Route path="/signup" element={<Signup setUser={setUser} />} />
@@ -143,19 +122,14 @@ export default function App() {
     );
   }
 
-  // --- Logged in ---
   return (
     <div className="flex flex-col h-screen">
-      {/* Navbar always top */}
       <Navbar user={user} setUser={setUser} />
 
-      {/* Sidebar + main content */}
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-
         <main className="flex-1 p-6 overflow-y-auto">
           <Routes>
-            {/* Dynamic route to handle basename automatically */}
             <Route path="/" element={<Dashboard />} />
             <Route path="/events" element={<Events />} />
             <Route path="/locations" element={<Locations />} />
