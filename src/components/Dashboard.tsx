@@ -20,7 +20,7 @@ export default function DashboardSubjects() {
   return (
     <div className="p-6 space-y-6">
       {/* Top 5 High-Level Cards */}
-     <h6 className="text-emerald-500 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold">
+     <h6 className="text-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold">
   Welcome Dashboard
 </h6>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -31,28 +31,39 @@ export default function DashboardSubjects() {
 
     {/* Chart */}
     <div className="h-40 sm:h-48 md:h-60 lg:h-50">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={[
-              { name: "Owner", value: 90 },
-              { name: "Workers", value: 410 },
-            ]}
-            dataKey="value"
-            cx="50%"
-            cy="50%"
-            outerRadius={40} // default smaller
-            label
-          >
-            <Cell fill="#22c55e" />
-            <Cell fill="#3b82f6" />
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+    <ResponsiveContainer width="100%" height="100%">
+  <PieChart>
+    <Pie
+      data={[
+        { name: "Owner", value: 90 },
+        { name: "Workers", value: 410 },
+      ]}
+      dataKey="value"
+      cx="50%"
+      cy="50%"
+      outerRadius={40}
+      label={{ fill: "#000", fontSize: 12 }} // white labels
+    >
+      <Cell fill="#000000" /> {/* Black */}
+      <Cell fill="#cccccc" /> {/* Light gray instead of pure white for visibility */}
+    </Pie>
+    <Tooltip 
+      contentStyle={{ backgroundColor: "#000", color: "#fff", border: "none" }}
+      itemStyle={{ color: "#fff" }}
+    />
+    <Legend
+      wrapperStyle={{ color: "#000" }}
+      iconType="circle"
+    />
+  </PieChart>
+</ResponsiveContainer>
+
     </div>
   </div>
+
+
+
+
 
   {/* Our Events */}
   <div className="p-4 rounded-lg shadow-lg border cursor-pointer hover:bg-gray-100 transition-colors">
@@ -73,11 +84,14 @@ export default function DashboardSubjects() {
             outerRadius={40}
             label
           >
-            <Cell fill="#22c55e" />
-            <Cell fill="#3b82f6" />
+          <Cell fill="#000000" /> {/* Black */}
+          <Cell fill="#cccccc" />
           </Pie>
           <Tooltip />
-          <Legend />
+           <Legend
+      wrapperStyle={{ color: "#000" }}
+      iconType="circle"
+    />
         </PieChart>
       </ResponsiveContainer>
     </div>
@@ -101,8 +115,11 @@ export default function DashboardSubjects() {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Legend />
-          <Bar dataKey="value" fill="#3b82f6" />
+          <Legend
+      wrapperStyle={{ color: "#000" }}
+      iconType="circle"
+    />
+          <Bar dataKey="value" fill=" text-gray-600" />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -115,11 +132,11 @@ export default function DashboardSubjects() {
     <ul className="space-y-2 mb-6 text-xs sm:text-sm">
       <li className="flex justify-between items-center">
         <span>Leader: Hajra</span>
-        <span className="text-green-500">↑</span>
+        <span className="#000">↑</span>
       </li>
       <li className="flex justify-between items-center">
         <span>Leader: Masooma</span>
-        <span className="text-green-500">↑</span>
+        <span className="#000">↑</span>
       </li>
     </ul>
 
@@ -135,8 +152,11 @@ export default function DashboardSubjects() {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Legend />
-          <Bar dataKey="work" fill="#4F46E5" />
+           <Legend
+      wrapperStyle={{ color: "#000" }}
+      iconType="circle"
+    />
+          <Bar dataKey="work" fill=" text-gray-600" />
         </BarChart>
       </ResponsiveContainer>
     </div>
