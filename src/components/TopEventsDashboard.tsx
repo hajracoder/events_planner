@@ -202,19 +202,19 @@ const TopEventsDashboard = () => {
           <td className="px-4 py-2 flex flex-wrap gap-2">
             <button
               onClick={() => setViewEvent(event)}
-              className="text-blue-600 hover:underline flex items-center gap-1"
+              className="#000 hover:underline flex items-center gap-1"
             >
               <Eye size={16} /> View
             </button>
             <button
               onClick={() => setEditEvent(event)}
-              className="text-green-600 hover:underline flex items-center gap-1"
+              className="#fff hover:underline flex items-center gap-1"
             >
               <Edit size={16} /> Edit
             </button>
             <button
               onClick={() => handleDelete(event.$id)}
-              className="text-red-600 hover:underline flex items-center gap-1"
+              className="#000 hover:underline flex items-center gap-1"
             >
               <Trash2 size={16} /> Delete
             </button>
