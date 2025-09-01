@@ -1,4 +1,3 @@
-// appwrite.ts
 import { Client, Account, Databases,ID } from "appwrite";
 
 const client = new Client()
@@ -7,7 +6,10 @@ const client = new Client()
 
 export const databases = new Databases(client);
 export const DATABASE_ID = "68ade7fc000132803e3e";
-export const COLLECTION_ID_EVENTS = "686e61d8002e1048f8d3";
+export const COLLECTION_ID_EVENTS = "Event2025_09_01";
+export const COLLECTION_ID_MAIN_EVENT = "main_event1_9_25";
+export const COLLECTION_ID_LOCATIONS = "locations_1_9_25";
+export const COLLECTION_ID_USERS= "users_01_9_25";
  export const account = new Account(client); 
  export { ID };
 
