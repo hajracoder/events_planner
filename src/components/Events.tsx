@@ -1,65 +1,32 @@
-import { useState } from "react";
-import { Trash2 } from "lucide-react";
 
-interface Event {
-  id: number;
+import { useState, useEffect, useRef } from "react";
+import { Plus, X, Trash2, Edit, Eye } from "lucide-react";
+import { databases, DATABASE_ID, COLLECTION_ID_MAIN_EVENT } from "../appwrite";
+
+
+type Event = {
+  $id: string;
   title: string;
   description: string;
   date: string;
   location: string;
   address: string;
-  status: string;
-}
+  status: "Upcoming" | "Ongoing" | "Completed";
+};
 
-export default function Events() {
-  const [events, setEvents] = useState<Event[]>([
-    {
-      id: 1,
-      title: "Marriage Ceremony",
-      description: "Wedding of Ali & Ayesha",
-      date: "2025-09-10",
-      location: "Lahore",
-      address: "Pearl Continental Hotel, Lahore",
-      status: "Upcoming",
-    },
-    {
-      id: 2,
-      title: "Birthday Party",
-      description: "Ahmed's 25th Birthday",
-      date: "2025-09-12",
-      location: "Karachi",
-      address: "Clifton Beach House, Karachi",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      title: "Conference",
-      description: "Tech Conference 2025",
-      date: "2025-09-15",
-      location: "Islamabad",
-      address: "Serena Hotel, Islamabad",
-      status: "Ongoing",
-    },
-    {
-      id: 4,
-      title: "Engagement Ceremony",
-      description: "Engagement of Sana & Usman",
-      date: "2025-09-20",
-      location: "Faisalabad",
-      address: "Royal Palm Banquet, Faisalabad",
-      status: "Upcoming",
-    },
-  ]);
 
+export default function EventsDashboard() {
+  const [events, setEvents] = useState<Event[]>([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("All");
+  const [filter, setFilter] = useState<"All" | "Upcoming" | "Ongoing" | "Completed">("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 3;
+  const [addModal, setAddModal] = useState(false);
+  const [editModal, setEditModal] = useState<Event | null>(null);
+  const [viewModal, setViewModal] = useState<Event | null>(null);
+  const itemsPerPage = 5;
+  const tableRef = useRef<HTMLTableElement>(null);
 
-  // Show/Hide Form
-  const [showForm, setShowForm] = useState(false);
-  const [newEvent, setNewEvent] = useState<Event>({
-    id: 0,
+  const [newEvent, setNewEvent] = useState<Omit<Event, "$id">>({
     title: "",
     description: "",
     date: "",
@@ -68,219 +35,220 @@ export default function Events() {
     status: "Upcoming",
   });
 
-  const deleteEvent = (id: number) => {
-    setEvents(events.filter((event) => event.id !== id));
+  // 🔹 Fetch Events from Appwrite
+  const fetchEvents = async () => {
+    try {
+      const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID_MAIN_EVENT);
+      const formatted: Event[] = res.documents.map((doc: any) => ({
+        $id: doc.$id,
+        title: doc.title,
+        description: doc.description,
+        date: doc.date,
+        location: doc.location,
+        address: doc.address,
+        status: doc.status,
+      }));
+      setEvents(formatted);
+    } catch (err) {
+      console.error("Fetch Error:", err);
+    }
   };
 
-  const addEvent = () => {
-    if (!newEvent.title || !newEvent.date) {
-      alert("Title and Date are required!");
-      return;
-    }
+  useEffect(() => { fetchEvents(); }, []);
 
-    setEvents([
-      ...events,
-      { ...newEvent, id: events.length ? events[events.length - 1].id + 1 : 1 },
+  // 🔹 Add Event
+// 🔹 Add Event
+const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  try {
+    // ✅ Appwrite schema ke liye loaction ka name exactly same
+    const safeEvent = {
+      title: newEvent.title,
+      description: newEvent.description,
+      loaction: newEvent.location || "", // Appwrite required field
+      address: newEvent.address,
+      date: newEvent.date,
+      status: newEvent.status,
+    };
+
+    const res = await databases.createDocument(
+      DATABASE_ID,
+      COLLECTION_ID_MAIN_EVENT,
+      "unique()",
+      safeEvent
+    );
+
+    // ✅ TypeScript Event type ke liye location map kar rahe
+    setEvents((prev) => [
+      ...prev,
+      {
+        $id: res.$id,
+        title: safeEvent.title,
+        description: safeEvent.description,
+        location: safeEvent.loaction, // TypeScript ke liye
+        address: safeEvent.address,
+        date: safeEvent.date,
+        status: safeEvent.status,
+      },
     ]);
 
-    setShowForm(false);
+    // Reset form
     setNewEvent({
-      id: 0,
       title: "",
       description: "",
-      date: "",
       location: "",
       address: "",
+      date: "",
       status: "Upcoming",
     });
-    setCurrentPage(Math.ceil((events.length + 1) / eventsPerPage));
+
+    setAddModal(false);
+  } catch (err) {
+    console.error("Add Error:", err);
+  }
+};
+
+// 🔹 Update Event
+const handleUpdate = async () => {
+  if (!editModal) return;
+
+  try {
+    const { $id, location, ...updateData } = editModal;
+
+    // Appwrite ke liye loaction field bhejna
+    const safeUpdate = {
+      ...updateData,
+      loaction: location, // Appwrite schema ke liye
+    };
+
+    await databases.updateDocument(
+      DATABASE_ID,
+      COLLECTION_ID_MAIN_EVENT,
+      $id!,
+      safeUpdate
+    );
+
+    setEvents(events.map(ev =>
+      ev.$id === $id
+        ? { ...editModal, location: editModal.location } // TypeScript Event type ke liye
+        : ev
+    ));
+
+    setEditModal(null);
+  } catch (err) {
+    console.error("Update Error:", err);
+  }
+};
+
+
+
+  // 🔹 Delete Event
+  const handleDelete = async (id: string) => {
+    try {
+      await databases.deleteDocument(DATABASE_ID, COLLECTION_ID_MAIN_EVENT, id);
+      setEvents(events.filter(ev => ev.$id !== id));
+    } catch (err) {
+      console.error("Delete Error:", err);
+    }
   };
 
-  // Filter + Search
-  const filteredEvents = events.filter((event) => {
+  // 🔹 Filtering & Pagination
+  const filtered = events.filter(ev => {
     const matchesSearch =
-      event.title.toLowerCase().includes(search.toLowerCase()) ||
-      event.description.toLowerCase().includes(search.toLowerCase());
-
-    const matchesFilter = filter === "All" || event.status === filter;
-
+      ev.title.toLowerCase().includes(search.toLowerCase()) ||
+      ev.description.toLowerCase().includes(search.toLowerCase());
+    const matchesFilter = filter === "All" || ev.status === filter;
     return matchesSearch && matchesFilter;
   });
 
-  // Pagination
-  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
-  const indexOfLastEvent = currentPage * eventsPerPage;
-  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div className="p-6">
-      <h2 className="text-4xl border border-green-200 bg-green-200 text-center text-green-900 font-[Montserrat] mb-32">
-        Our Events
+    <div className="p-6 max-w-7xl mx-auto">
+      <h2 className="text-6xl text-left font-[Montserrat] mt-4 mb-4">
+        Events
       </h2>
 
-      {/* Show Form Above Search Bar */}
-      {showForm && (
-        <div className="bg-white border rounded-lg shadow p-4 mb-4">
-          <h3 className="text-lg font-semibold mb-3">Add New Event</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <input
-              type="text"
-              placeholder="Title"
-              value={newEvent.title}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, title: e.target.value })
-              }
-              className="border px-3 py-2 rounded col-span-2"
-            />
-            <input
-              type="text"
-              placeholder="Description"
-              value={newEvent.description}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, description: e.target.value })
-              }
-              className="border px-3 py-2 rounded col-span-2"
-            />
-            <input
-              type="date"
-              value={newEvent.date}
-              onChange={(e) => setNewEvent({ ...newEvent, date: e.target.value })}
-              className="border px-3 py-2 rounded"
-            />
-            <select
-              value={newEvent.status}
-              onChange={(e) => setNewEvent({ ...newEvent, status: e.target.value })}
-              className="border px-3 py-2 rounded"
-            >
-              <option value="Upcoming">Upcoming</option>
-              <option value="Ongoing">Ongoing</option>
-              <option value="Completed">Completed</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Location"
-              value={newEvent.location}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, location: e.target.value })
-              }
-              className="border px-3 py-2 rounded"
-            />
-            <input
-              type="text"
-              placeholder="Address"
-              value={newEvent.address}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, address: e.target.value })
-              }
-              className="border px-3 py-2 rounded"
-            />
-          </div>
-
-          <div className="flex justify-end gap-2 mt-4">
-            <button
-              onClick={() => setShowForm(false)}
-              className="px-4 py-2 border rounded"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={addEvent}
-              className="bg-green-600 text-white px-4 py-2 rounded"
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Search + Filter + Add */}
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+      <div className="flex flex-col md:flex-row md:justify-between gap-3 mb-4">
         <input
           type="text"
           placeholder="Search events..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border-2 px-3 py-2 rounded flex-1"
+          onChange={e => setSearch(e.target.value)}
+          className="w-full md:w-1/2 border px-3 py-2 rounded focus:ring-2 focus:ring-blue-400"
         />
-        <div className="flex items-center gap-2">
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="border px-3 py-2 rounded"
-          >
-            <option value="All">All</option>
-            <option value="Upcoming">Upcoming</option>
-            <option value="Ongoing">Ongoing</option>
-            <option value="Completed">Completed</option>
-          </select>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            + Add Event
-          </button>
-        </div>
+        <select
+          value={filter}
+          onChange={e => setFilter(e.target.value as any)}
+          className="w-full md:w-1/4 border px-3 py-2 rounded focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="All">All</option>
+          <option value="Upcoming">Upcoming</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Completed">Completed</option>
+        </select>
+        <button
+          onClick={() => setAddModal(true)}
+          className="w-full md:w-1/4 flex items-center justify-center gap-2 px-4 py-2 border rounded bg-white hover:bg-gray-100"
+        >
+          <Plus size={16} /> Add Event
+        </button>
       </div>
 
       {/* Table */}
-      <table className="min-w-full border border-green-700 rounded-lg overflow-hidden shadow">
-        <thead className="bg-green-200">
-          <tr>
-            <th className="px-4 py-2 text-left">Title</th>
-            <th className="px-4 py-2 text-left">Description</th>
-            <th className="px-4 py-2 text-left">Date</th>
-            <th className="px-4 py-2 text-left">Location</th>
-            <th className="px-4 py-2 text-left">Address</th>
-            <th className="px-4 py-2 text-left">Status</th>
-            <th className="px-4 py-2 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentEvents.length === 0 && (
+      <div className="overflow-x-auto">
+        <table ref={tableRef} className="min-w-full divide-y divide-gray-200 text-gray-900 rounded-lg overflow-hidden shadow">
+          <thead className="bg-gray-100">
             <tr>
-              <td colSpan={7} className="text-center py-4 text-gray-500">
-                No events found
-              </td>
+              <th className="px-4 py-2 text-left">Title</th>
+              <th className="px-4 py-2 text-left">Description</th>
+              <th className="px-4 py-2 text-left">Date</th>
+              <th className="px-4 py-2 text-left">Location</th>
+              <th className="px-4 py-2 text-left">Address</th>
+              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 text-center">Actions</th>
             </tr>
-          )}
-          {currentEvents.map((event) => (
-            <tr key={event.id} className="border-b hover:bg-gray-50">
-              <td className="px-4 py-2">{event.title}</td>
-              <td className="px-4 py-2">{event.description}</td>
-              <td className="px-4 py-2">{event.date}</td>
-              <td className="px-4 py-2">{event.location}</td>
-              <td className="px-4 py-2">{event.address}</td>
-              <td className="px-4 py-2">{event.status}</td>
-              <td className="px-4 py-2 text-center">
-                <button
-                  onClick={() => deleteEvent(event.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <Trash2 size={20} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {paginated.map(ev => (
+              <tr key={ev.$id} className="hover:bg-gray-50 transition duration-150">
+                <td className="px-4 py-2">{ev.title}</td>
+                <td className="px-4 py-2">{ev.description}</td>
+                <td className="px-4 py-2">{ev.date}</td>
+                <td className="px-4 py-2">{ev.location}</td>
+                <td className="px-4 py-2">{ev.address}</td>
+                <td className="px-4 py-2">{ev.status}</td>
+                <td className="px-4 py-2 text-center flex justify-center gap-2">
+                  <button onClick={() => setViewModal(ev)} className="text-blue-600"><Eye size={18} /></button>
+                  <button onClick={() => setEditModal(ev)} className="text-green-600"><Edit size={18} /></button>
+                  <button onClick={() => handleDelete(ev.$id)} className="text-red-600"><Trash2 size={18} /></button>
+                </td>
+              </tr>
+            ))}
+            {paginated.length === 0 && (
+              <tr>
+                <td colSpan={7} className="text-center py-4 text-gray-500">No events found</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination */}
-      <div className="flex justify-center items-center mt-4 gap-2">
+      <div className="flex justify-center gap-2 mt-4">
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
           className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Prev
-        </button>
+        >Prev</button>
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
             onClick={() => setCurrentPage(i + 1)}
-            className={`px-3 py-1 border rounded ${
-              currentPage === i + 1 ? "bg-green-600 text-white" : ""
-            }`}
+            className={`px-3 py-1 border rounded ${currentPage === i + 1 ? "bg-black text-white" : ""}`}
           >
             {i + 1}
           </button>
@@ -289,10 +257,124 @@ export default function Events() {
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage(currentPage + 1)}
           className="px-3 py-1 border rounded disabled:opacity-50"
-        >
-          Next
-        </button>
+        >Next</button>
       </div>
+
+      {/* Add Modal */}
+      {addModal && (
+        <Modal title="Add Event" onClose={() => setAddModal(false)}>
+    <EventForm
+      event={newEvent}
+      setEvent={setNewEvent}
+      onSubmit={handleAdd} // ✅ ab TypeScript error nahi aayega
+      submitText="Save"
+    />
+  </Modal>
+      )}
+
+      {/* Edit Modal */}
+      {editModal && (
+        <Modal title="Edit Event" onClose={() => setEditModal(null)}>
+          <EventForm
+            event={editModal}
+            setEvent={setEditModal}
+            onSubmit={handleUpdate}
+            submitText="Update"
+          />
+        </Modal>
+      )}
+
+      {/* View Modal */}
+      {viewModal && (
+        <Modal title={viewModal.title} onClose={() => setViewModal(null)}>
+          <div className="space-y-2 text-gray-700">
+            <p><strong>Description:</strong> {viewModal.description}</p>
+            <p><strong>Date:</strong> {viewModal.date}</p>
+            <p><strong>Location:</strong> {viewModal.location}</p>
+            <p><strong>Address:</strong> {viewModal.address}</p>
+            <p><strong>Status:</strong> {viewModal.status}</p>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
+
+// 🔹 Modal Component
+const Modal = ({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold">{title}</h2>
+        <button onClick={onClose} className="text-gray-500 hover:text-gray-800"><X size={24} /></button>
+      </div>
+      {children}
+    </div>
+  </div>
+);
+
+// 🔹 Event Form Component
+const EventForm = ({
+  event,
+  setEvent,
+  onSubmit,
+  submitText,
+}: {
+  event: any;
+  setEvent: any;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void; // ✅ fix
+  submitText: string;
+}) => (
+  <form onSubmit={onSubmit} className="space-y-3">
+    <input
+      type="text"
+      placeholder="Title"
+      value={event.title}
+      onChange={e => setEvent({ ...event, title: e.target.value })}
+      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-gray-400"
+    />
+    <input
+      type="text"
+      placeholder="Description"
+      value={event.description}
+      onChange={e => setEvent({ ...event, description: e.target.value })}
+      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-gray-400"
+    />
+    <input
+      type="date"
+      value={event.date}
+      onChange={e => setEvent({ ...event, date: e.target.value })}
+      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-gray-400"
+    />
+    <input
+      type="text"
+      placeholder="Location"
+      value={event.location}
+      onChange={e => setEvent({ ...event, location: e.target.value })}
+      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-gray-400"
+    />
+    <input
+      type="text"
+      placeholder="Address"
+      value={event.address}
+      onChange={e => setEvent({ ...event, address: e.target.value })}
+      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-gray-400"
+    />
+    <select
+      value={event.status}
+      onChange={e => setEvent({ ...event, status: e.target.value })}
+      className="w-full border px-3 py-2 rounded focus:ring-2 focus:ring-gray-400"
+    >
+      <option value="Upcoming">Upcoming</option>
+      <option value="Ongoing">Ongoing</option>
+      <option value="Completed">Completed</option>
+    </select>
+    <button
+      type="submit" // ✅ change from onClick to form submit
+      className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+    >
+      {submitText}
+    </button>
+  </form>
+);
+
