@@ -38,7 +38,7 @@ export default function Sidebar() {
   return (
     <section className="font-[Montserrat]">
       {/* Mobile Toggle Button */}
-      <div className="lg:hidden fixed top-4 right-4 z-50">
+      <div className="lg:hidden fixed top-16 right-4 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="p-2 rounded-md border"
