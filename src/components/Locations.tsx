@@ -164,7 +164,7 @@ setLocations(prev => [...prev, addedLocation]);
               name="status"
               value={formData.status}
               onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-              className="border px-3 py-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-gray-400"
+              className="border px-3 py-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-gray-400"
             >
               <option value="Active">Active</option>
               <option value="Inactive">Inactive</option>
@@ -219,8 +219,8 @@ setLocations(prev => [...prev, addedLocation]);
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
                       loc.status === "Active"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
+                        ? "bg-green-100 #000"
+                        : "bg-red-100 #000"
                     }`}
                   >
                     {loc.status}
@@ -245,7 +245,7 @@ setLocations(prev => [...prev, addedLocation]);
                 <td className="border px-4 py-2 space-x-2">
                   <button
                     onClick={() => deleteLocation(loc.$id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                    className="bg-black hover:bg-red-600 text-white px-3 py-1 rounded transition"
                   >
                     Delete
                   </button>
