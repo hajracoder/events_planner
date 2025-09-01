@@ -62,7 +62,7 @@ export default function Sidebar({ setUser }: SidebarProps) {
       <div className="lg:hidden fixed top-2 right-4 z-50">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="p-2 rounded-md border"
+          className="p-2 text-white rounded-md border"
         >
           {mobileOpen ? <ChevronLeft size={24} /> : <Menu size={24} />}
         </button>
