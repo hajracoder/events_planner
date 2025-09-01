@@ -222,9 +222,9 @@ const handleUpdate = async () => {
                 <td className="px-4 py-2">{ev.address}</td>
                 <td className="px-4 py-2">{ev.status}</td>
                 <td className="px-4 py-2 text-center flex justify-center gap-2">
-                  <button onClick={() => setViewModal(ev)} className="text-blue-600"><Eye size={18} /></button>
-                  <button onClick={() => setEditModal(ev)} className="text-green-600"><Edit size={18} /></button>
-                  <button onClick={() => handleDelete(ev.$id)} className="text-red-600"><Trash2 size={18} /></button>
+                  <button onClick={() => setViewModal(ev)} className="#000"><Eye size={18} /></button>
+                  <button onClick={() => setEditModal(ev)} className="#000"><Edit size={18} /></button>
+                  <button onClick={() => handleDelete(ev.$id)} className="#000"><Trash2 size={18} /></button>
                 </td>
               </tr>
             ))}
