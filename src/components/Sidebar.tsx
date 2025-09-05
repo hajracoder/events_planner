@@ -98,7 +98,7 @@ export default function Sidebar({ setUser }: SidebarProps) {
             src={logo}
             alt="Event Planner Logo"
             className={`transition-all duration-300 ${
-              isOpen ? "h-44 w-44" : "h-20 w-20"
+              isOpen ? "h-12 w-12" : "h-20 w-20"
             }`}
           />
           <h3
