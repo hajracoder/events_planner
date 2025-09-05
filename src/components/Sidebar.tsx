@@ -94,16 +94,16 @@ export default function Sidebar({ setUser }: SidebarProps) {
             isOpen ? "-mt-8" : "mt-4"
           }`}
         >
-          <img
+         <img
             src={logo}
             alt="Event Planner Logo"
             className={`transition-all duration-300 ${
-              isOpen ? "h-44 w-44" : "h-20 w-20"
+              isOpen ? "h-33 w-33" : "h-12 w-12"
             }`}
           />
           <h3
             className={`text-center font-bold transition-all duration-300 ${
-              isOpen ? "text-xl -mt-12" : "text-sm -mt-6"
+              isOpen ? "text -mt-8" : "text-sm -mt-2"
             }`}
           >
             Event Planner
