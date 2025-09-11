@@ -215,8 +215,6 @@
 
 
 
-
-
 // src/components/Dashboard.tsx
 import React, { useEffect, useState } from "react";
 import { databases, DATABASE_ID, COLLECTION_ID_EVENTS } from "../appwrite";
@@ -252,18 +250,19 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
-       {/* Heading */}
-      <h2 className="text-2xl text-black sm:text-3xl md:text-4xl lg:text-5xl font-[Montserrat] mt-4 mb-6 text-left">
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+
+    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-[Montserrat] mt-4 mb-6 text-left">
         Dashboard
       </h2>
-    
-    <div className="p-6 grid grid-cols-1   md:grid-cols-4 gap-6">
+   
+
+    <div className="p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
 
       {/* 👤 Users */}
       <div className="bg-white p-6 rounded-2xl shadow text-center">
-        <h2 className="text-lg text-left  font-semibold mb-2">Users</h2>
-        <p className="text-sm text-left  mb-4">
+        <h2 className="text-lg font-semibold text-left  mb-2">Users</h2>
+        <p className="text-sm  text-left mb-4">
           Total: <span className="font-semibold">{userCounts.total}</span>
         </p>
         <ResponsiveContainer width="100%" height={220}>
@@ -276,7 +275,7 @@ const Dashboard: React.FC = () => {
               cx="50%"
               cy="50%"
               outerRadius={80}
-               innerRadius={40}
+                 innerRadius={40} 
               dataKey="value"
             >
               <Cell fill="#000000" />
@@ -290,8 +289,8 @@ const Dashboard: React.FC = () => {
 
       {/* 📍 Locations */}
       <div className="bg-white p-6 rounded-2xl shadow text-center">
-        <h2 className="text-lg text-left font-semibold mb-2">Locations</h2>
-        <p className="text-sm text-left mb-4">
+        <h2 className="text-lg font-semibold text-left mb-2">Locations</h2>
+        <p className="text-sm  text-left mb-4">
           Total: <span className="font-semibold">{locationCounts.total}</span>
         </p>
         <ResponsiveContainer width="100%" height={220}>
@@ -304,7 +303,7 @@ const Dashboard: React.FC = () => {
               cx="50%"
               cy="50%"
               outerRadius={80}
-               innerRadius={40}
+                 innerRadius={40} 
               dataKey="value"
             >
               <Cell fill="#000000" />
@@ -318,7 +317,7 @@ const Dashboard: React.FC = () => {
 
       {/* 📅 Events */}
       <div className="bg-white p-6 rounded-2xl shadow text-center">
-        <h2 className="text-lg text-left font-semibold mb-2">Events</h2>
+        <h2 className="text-lg font-semibold text-left mb-2">Events</h2>
         <p className="text-sm text-left mb-4">
           Total: <span className="font-semibold">{eventCounts.total}</span>
         </p>
@@ -327,17 +326,15 @@ const Dashboard: React.FC = () => {
             <Pie
               data={[
                 { name: "Upcoming", value: eventCounts.upcoming },
-                { name: "Ongoing", value: eventCounts.ongoing },
                 { name: "Completed", value: eventCounts.completed },
               ]}
               cx="50%"
               cy="50%"
               outerRadius={80}
-               innerRadius={40}
+                 innerRadius={40} 
               dataKey="value"
             >
               <Cell fill="#000000" />
-              <Cell fill="#888888" />
               <Cell fill="#cccccc" />
             </Pie>
             <Tooltip />
@@ -347,38 +344,38 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* 🎯 Events by Rate (Black & White) */}
-  <div className="bg-white p-6 rounded-2xl shadow text-center">
-    <h3 className="text-lg text-left font-semibold mb-2">Events by Rate</h3>
-      <p className="text-sm text-left mb-4">
+    {/* 🎯 Events by Rate (Donut Chart with Total under heading) */}
+<div className="bg-white p-6 rounded-2xl shadow text-center">
+  <h3 className="text-lg text-left font-semibold mb-2">Events by Rate</h3>
+  <p className="text-sm text-left mb-4">
     Total: <span className="font-semibold">{events.length}</span>
   </p>
-    <ResponsiveContainer width="100%" height={220}>
-      <PieChart>
-        <Pie
-          data={[
-            { name: "Premium", value: events.filter((e) => e.rate === "Premium").length },
-            { name: "Standard", value: events.filter((e) => e.rate === "Standard").length },
-          ]}
-          cx="50%"
-          cy="50%"
-          outerRadius={80}
-           innerRadius={40}
-          dataKey="value"
-        >
-          <Cell fill="#000000" /> {/* Black */}
-          <Cell fill="#cccccc" /> {/* Gray */}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
-    </ResponsiveContainer>
-  </div>
+  <ResponsiveContainer width="100%" height={220}>
+    <PieChart>
+      <Pie
+        data={[
+          { name: "Premium", value: events.filter((e) => e.rate === "Premium").length },
+          { name: "Standard", value: events.filter((e) => e.rate === "Standard").length },
+        ]}
+        cx="50%"
+        cy="50%"
+        outerRadius={80}
+        innerRadius={40}   // 👈 Donut shape
+        dataKey="value"
+      >
+        <Cell fill="#000000" /> {/* Black */}
+        <Cell fill="#cccccc" /> {/* Gray */}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  </ResponsiveContainer>
+</div>
 
 
-</div>
-<TopEventsDashboard/>
-</div>
-  
+    </div>
+    <TopEventsDashboard/>
+    </div>
   );
 };
 
