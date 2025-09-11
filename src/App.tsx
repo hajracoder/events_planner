@@ -124,10 +124,10 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen">
-      <Navbar user={user} setUser={setUser} />
+      <Navbar/>
 
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
+        <Sidebar user={user} setUser={setUser} />
         <main className="flex-1 p-6 overflow-y-auto">
           <Routes>
             <Route path="/" element={<Dashboard />} />
